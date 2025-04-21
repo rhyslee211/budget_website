@@ -1,0 +1,8 @@
+Dashboard page
+Budget setup page - allows users to set up a budget including expected or desired amount to pay towards categories per month
+Expense/Income tracker - allows users to track money coming in and out every month
+Saving goals - users can set goals
+Debt management page - users track debts
+Account settings
+Login/Sign up
+Contact us
