@@ -5,7 +5,7 @@ interface UserContextType {
   user: User | null;
   setUser: (user: User | null) => void;
 
-    isLoggedIn: boolean;
-    setIsLoggedIn: (isLoggedIn: boolean) => void;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (isLoggedIn: boolean) => void;
     
 }
