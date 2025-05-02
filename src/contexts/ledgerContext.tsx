@@ -7,6 +7,7 @@ interface LedgerContextType {
   addEntry: (entry: LedgerEntry) => void;
   deleteEntry: (id: string) => void;
   editEntry: (id: string, updatedEntry: LedgerEntry) => void;
+  getCounter: () => number;
 }
 
 const LedgerContext = createContext<LedgerContextType | undefined>(undefined);
@@ -14,8 +15,14 @@ const LedgerContext = createContext<LedgerContextType | undefined>(undefined);
 export const LedgerProvider = ({ children }: { children: ReactNode }) => {
   const [entries, setEntries] = useState<LedgerEntry[]>([]);
 
+  const [counter, setCounter] = useState(0);
+  const getCounter = () => {
+    return counter;
+  }
+
   const addEntry = (entry: LedgerEntry) => {
     setEntries((prev) => [...prev, entry]);
+    setCounter((prev) => prev + 1); // Increment counter when a new entry is added
   };
 
   const deleteEntry = (id: string) => {
@@ -29,7 +36,7 @@ export const LedgerProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <LedgerContext.Provider value={{ entries, setEntries, addEntry, deleteEntry , editEntry }}>
+    <LedgerContext.Provider value={{ entries, setEntries, addEntry, deleteEntry , editEntry, getCounter }}>
       {children}
     </LedgerContext.Provider>
   );
