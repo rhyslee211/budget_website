@@ -7,6 +7,7 @@ interface BudgetContextType {
   addEntry: (entry: BudgetEntry) => void;
   deleteEntry: (id: string) => void;
   editEntry: (id: string, updatedEntry: BudgetEntry) => void;
+  getCounter: () => number;
 }
 
 const BudgetContext = createContext<BudgetContextType | undefined>(undefined);
@@ -14,8 +15,15 @@ const BudgetContext = createContext<BudgetContextType | undefined>(undefined);
 export const BudgetProvider = ({ children }: { children: ReactNode }) => {
   const [entries, setEntries] = useState<BudgetEntry[]>([]);
 
+  const [counter, setCounter] = useState(0);
+
+  const getCounter = () => {
+    return counter;
+  }
+
   const addEntry = (entry: BudgetEntry) => {
     setEntries((prev) => [...prev, entry]);
+    setCounter((prev) => prev + 1); // Increment counter when a new entry is added
   };
 
   const deleteEntry = (id: string) => {
@@ -29,7 +37,7 @@ export const BudgetProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <BudgetContext.Provider value={{ entries, setEntries, addEntry, deleteEntry , editEntry }}>
+    <BudgetContext.Provider value={{ entries, setEntries, addEntry, deleteEntry , editEntry, getCounter }}>
       {children}
     </BudgetContext.Provider>
   );

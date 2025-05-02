@@ -8,7 +8,7 @@ Chart.register(CategoryScale);
 
 function Budget() {
     
-    const { entries, addEntry, deleteEntry , editEntry } = useBudget();
+    const { entries, addEntry, deleteEntry , editEntry , getCounter } = useBudget();
 
     const expenseData = useMemo(() => {
         const categoryTotals = {
@@ -40,14 +40,14 @@ function Budget() {
 
     const excessData = useMemo(() => {
         const totalIncome = entries.reduce((acc, entry) => {
-            if (entry.category === 'Paycheck') {
+            if (entry.category === 'Paycheck' || entry.category === 'Other Income') {
                 return acc + Number(entry.amount);
             }
             return acc;
         }, 0);
 
         const totalExpenses = entries.reduce((acc, entry) => {
-            if (entry.category !== 'Paycheck') {
+            if (entry.category !== 'Paycheck' && entry.category !== 'Other Income') {
                 return acc + Number(entry.amount);
             }
             return acc;
@@ -77,17 +77,14 @@ function Budget() {
         }]
       };
 
-    const [counter, setCounter] = useState(0);
-
     const handleAddEntry = () => {
         const newEntry = {
-            id: `entry-${counter}`,
+            id: `entry-${getCounter()}`,
             amount: 0,
             category: 'Food',
             note: 'Sample note',
         };
         addEntry(newEntry);
-        setCounter(counter + 1);
     }
 
     const handleDeleteEntry = (id: string) => {
@@ -126,7 +123,7 @@ function Budget() {
                             <select onChange={(e) => handleEditEntry(entry.id,'category',e)} value={entry.category} className='bg-white border rounded-md overflow-hidden px-1'>
                             <optgroup label="Income">
                                 <option value="Paycheck">Paycheck</option>
-                                <option value="Other">Other</option>
+                                <option value="Other Income">Other Income</option>
                             </optgroup>
                             <optgroup label="Expenses">
                                 <option value="Food">Food</option>

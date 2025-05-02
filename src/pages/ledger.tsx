@@ -8,7 +8,7 @@ Chart.register(CategoryScale);
 
 function Ledger() {
     
-    const { entries, addEntry, deleteEntry , editEntry } = useLedger();
+    const { entries, addEntry, deleteEntry , editEntry , getCounter } = useLedger();
 
     const expenseData = useMemo(() => {
         const categoryTotals = {
@@ -49,14 +49,14 @@ function Ledger() {
         console.log(entries);
 
         const totalIncome = entries.filter(entry => entry.date <= new Date().toISOString().split('T')[0] && entry.date >= lastMonth.toISOString().split('T')[0]).reduce((acc, entry) => {
-            if (entry.category === 'Paycheck') {
+            if (entry.category === 'Paycheck' || entry.category === 'Other Income') {
                 return acc + Number(entry.amount);
             }
             return acc;
         }, 0);
 
         const totalExpenses = entries.filter(entry => entry.date <= new Date().toISOString().split('T')[0] && entry.date >= lastMonth.toISOString().split('T')[0]).reduce((acc, entry) => {
-            if (entry.category !== 'Paycheck') {
+            if (entry.category !== 'Paycheck' && entry.category !== 'Other Income') {
                 return acc + Number(entry.amount);
             }
             return acc;
@@ -86,18 +86,15 @@ function Ledger() {
         }]
       };
 
-    const [counter, setCounter] = useState(0);
-
     const handleAddEntry = () => {
         const newEntry = {
-            id: `entry-${counter}`,
+            id: `entry-${getCounter()}`,
             date: new Date().toISOString().split('T')[0], // Current date in YYYY-MM-DD format
             amount: 0,
             category: 'Food',
             note: 'Sample note',
         };
         addEntry(newEntry);
-        setCounter(counter + 1);
     }
 
     const handleDeleteEntry = (id: string) => {
@@ -138,7 +135,7 @@ function Ledger() {
                             <select onChange={(e) => handleEditEntry(entry.id,'category',e)} value={entry.category} className='bg-white border rounded-md overflow-hidden px-1'>
                             <optgroup label="Income">
                                 <option value="Paycheck">Paycheck</option>
-                                <option value="Other">Other</option>
+                                <option value="Other Income">Other Income</option>
                             </optgroup>
                             <optgroup label="Expenses">
                                 <option value="Food">Food</option>
