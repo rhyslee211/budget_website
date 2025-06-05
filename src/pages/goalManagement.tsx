@@ -1,7 +1,7 @@
 import { React } from 'react';
-import { useDebt } from '../contexts/debtContext';
+import { useGoal } from '../contexts/goalsContext';
 import { Line } from 'react-chartjs-2';
-import {calculateMonthlyDebtDataPoints , calculateLastMonthofDebt , formatMonth} from '../utils/debtUtils';
+import { calculateMonthlyGoalDataPoints, calculateLastMonthofGoal, formatMonth } from '../utils/goalUtils';
 
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
@@ -9,25 +9,25 @@ import { CategoryScale } from "chart.js";
 
 Chart.register(CategoryScale);
 
-function DebtManagement() {
+function GoalManagement() {
 
-    const { entries, addEntry, deleteEntry , editEntry , getCounter } = useDebt();
+    const { entries, addEntry, deleteEntry , editEntry , getCounter } = useGoal();
 
     const lineChartData = {
-        labels: Array.from({ length: Math.min(60,calculateLastMonthofDebt(entries))}, (_, i) => `${formatMonth(i)}`),
-        datasets: entries.map((entry, index) => ({
-            label: entry.name || `Entry ${index + 1}`,
-            data: calculateMonthlyDebtDataPoints([entry])[0],
-            borderColor: `hsl(${index * 60}, 100%, 50%)`,
-            backgroundColor: `hsl(${index * 60}, 100%, 50%, 0.2)`,
-            fill: true,
-        })),
-    };
+            labels: Array.from({ length: Math.min(60,calculateLastMonthofGoal(entries))}, (_, i) => `${formatMonth(i)}`),
+            datasets: entries.map((entry, index) => ({
+                label: entry.name || `Entry ${index + 1}`,
+                data: calculateMonthlyGoalDataPoints([entry])[0],
+                borderColor: `hsl(${index * 60}, 100%, 50%)`,
+                backgroundColor: `hsl(${index * 60}, 100%, 50%, 0.2)`,
+                fill: true,
+            })),
+        };
 
     const handleAddEntry = () => {
         const newEntry = {
             id: `entry-${getCounter()}`,
-            debtAmount: 0,
+            goalAmount: 0,
             interestRate: 0,
             paymentAmount: 0,
             paymentFrequency: 'monthly',
@@ -56,18 +56,17 @@ function DebtManagement() {
 
     return (
         <div className='size-full flex flex-col justify-center items-center overflow-auto'>
-            <h1 className='text-3xl font-bold mb-4'>Debt Manager</h1>
+            <h1 className='text-3xl font-bold mb-4'>Goal Manager</h1>
             <div className='w-9/10 lg:w-2/3 h-8/10 bg-white rounded-lg shadow-lg text-black overflow-y-auto'>
                 <div className='h-full'>
                     <table className='w-full border-collapse border border-gray-300 table-fixed'>
                         <thead className='bg-gray-200'>
                             <tr className='text-center'>
-                            <th>Debt Name</th>
-                            <th>Principal Amount</th>
-                            <th>Interest Rate %</th>
+                            <th>Goal Name</th>
+                            <th>Goal Amount</th>
                             <th>Payment Amount</th>
                             <th>Payment Frequency</th>
-                            <th>Due Date</th>
+                            <th>Goal Date</th>
                             <th>Actions</th>
                             </tr>
                         </thead>
@@ -75,8 +74,7 @@ function DebtManagement() {
                             {entries.map((entry) => (
                             <tr className='h-[60px] text-center' key={entry.id}>
                                 <td className=''><input type="text" onChange={(e) => handleEditEntry(entry.id,'name',e)} value={entry.name} className='bg-white border rounded-md overflow-hidden px-1 w-9/10'></input></td>
-                                <td className=''><input type="number" step="0.01" onChange={(e) => handleEditEntry(entry.id,'debtAmount',e)} value={entry.debtAmount} className='bg-white border rounded-md overflow-hidden px-1 w-9/10'></input></td>
-                                <td className=''><input type="number" onChange={(e) => handleEditEntry(entry.id,'interestRate',e)} value={entry.interestRate} className='bg-white border rounded-md overflow-hidden px-1 w-9/10'></input></td>
+                                <td className=''><input type="number" step="0.01" onChange={(e) => handleEditEntry(entry.id,'goalAmount',e)} value={entry.goalAmount} className='bg-white border rounded-md overflow-hidden px-1 w-9/10'></input></td>
                                 <td className=''><input type="number" step="0.01" onChange={(e) => handleEditEntry(entry.id,'paymentAmount',e)} value={entry.paymentAmount} className='bg-white border rounded-md overflow-hidden px-1 w-9/10'></input></td>
                                 <td className=''>
                                     <select onChange={(e) => handleEditEntry(entry.id,'paymentFrequency',e)} value={entry.paymentFrequency} className='bg-white border rounded-md overflow-hidden px-1 w-9/10'>
@@ -85,7 +83,7 @@ function DebtManagement() {
                                         <option value="weekly">Weekly</option>
                                     </select>
                                 </td>
-                                <td className=''><input type="date" onChange={(e) => handleEditEntry(entry.id,'dueDate',e)} value={entry.dueDate} className='bg-white border rounded-md overflow-hidden px-1 w-9/10'></input></td>
+                                <td className=''><input type="date" onChange={(e) => handleEditEntry(entry.id,'goalDate',e)} value={entry.goalDate} className='bg-white border rounded-md overflow-hidden px-1 w-9/10'></input></td>
                                 <td>
                                     <button onClick={() => handleDeleteEntry(entry.id)} className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg'>Delete</button>
                                 </td>
@@ -111,7 +109,7 @@ function DebtManagement() {
                             },
                             title: {
                                 display: true,
-                                text: 'Debt Over Time',
+                                text: 'Goal Over Time',
                             },
                         },
                         scales: {
@@ -124,7 +122,7 @@ function DebtManagement() {
                             y: {
                                 title: {
                                     display: true,
-                                    text: 'Debt Amount',
+                                    text: 'Remaining Goal Amount',
                                 },
                             },
                         },
@@ -136,4 +134,4 @@ function DebtManagement() {
 }
 
 
-export default DebtManagement;
+export default GoalManagement;
