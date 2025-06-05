@@ -103,53 +103,54 @@ function Budget() {
     }
 
     return (
-    <div className='size-full flex flex-col justify-center items-center overflow-auto'>
+    <div className='size-full flex flex-col justify-center items-center'>
         <h1 className='text-3xl font-bold mb-4'>Monthly Budget Planner</h1>
-        <div className='w-9/10 lg:w-2/3 h-8/10 bg-white rounded-lg shadow-lg text-black overflow-y-auto'>
-            <table className='w-full h-full border-collapse border border-gray-300 table-fixed'>
-                <thead className='bg-gray-200'>
-                    <tr className='text-center'>
-                    <th>Amount</th>
-                    <th>Category</th>
-                    <th>Note</th>
-                    <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody className=''>
-                    {entries.map((entry) => (
-                    <tr className='h-[60px] text-center' key={entry.id}>
-                        <td className=''><input type="number" onChange={(e) => handleEditEntry(entry.id,'amount',e)} value={entry.amount} className='bg-white border rounded-md overflow-hidden px-1'></input></td>
-                        <td className=''>
-                            <select onChange={(e) => handleEditEntry(entry.id,'category',e)} value={entry.category} className='bg-white border rounded-md overflow-hidden px-1'>
-                            <optgroup label="Income">
-                                <option value="Paycheck">Paycheck</option>
-                                <option value="Other Income">Other Income</option>
-                            </optgroup>
-                            <optgroup label="Expenses">
-                                <option value="Food">Food</option>
-                                <option value="Transport">Transport</option>
-                                <option value="Entertainment">Entertainment</option>
-                                <option value="Utilities">Utilities</option>
-                                <option value="Rent">Rent</option>
-                                <option value="Investments">Investments</option>
-                                <option value="Other">Other</option>
-                            </optgroup>
-                            </select></td>
-                        <td className=''><input onChange={(e) => handleEditEntry(entry.id,'note',e)} value={entry.note} className='bg-white border rounded-md overflow-hidden px-1'></input></td>
-                        <td>
-                            <button onClick={() => handleDeleteEntry(entry.id)} className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg'>Delete</button>
-                        </td>
-                    </tr>
-                    ))}
-                    <tr className='h-full' />
-                </tbody>
-            </table>
+        <div className='w-9/10 lg:w-2/3 h-[500px] bg-white rounded-lg shadow-lg text-black overflow-y-auto'>
+            <div className='h-full'>
+                <table className='w-full border-collapse border border-gray-300 table-fixed'>
+                    <thead className='bg-gray-200 sticky top-0 z-10'>
+                        <tr className='text-center'>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th>Note</th>
+                        <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody className=''>
+                        {entries.map((entry) => (
+                        <tr className='h-[60px] max-h-[60px] text-center' key={entry.id}>
+                            <td className=''><input type="number" onChange={(e) => handleEditEntry(entry.id,'amount',e)} value={entry.amount} className='bg-white border rounded-md overflow-hidden px-1 w-9/10'></input></td>
+                            <td className=''>
+                                <select onChange={(e) => handleEditEntry(entry.id,'category',e)} value={entry.category} className='bg-white border rounded-md overflow-hidden px-1 w-9/10'>
+                                <optgroup label="Income">
+                                    <option value="Paycheck">Paycheck</option>
+                                    <option value="Other Income">Other Income</option>
+                                </optgroup>
+                                <optgroup label="Expenses">
+                                    <option value="Food">Food</option>
+                                    <option value="Transport">Transport</option>
+                                    <option value="Entertainment">Entertainment</option>
+                                    <option value="Utilities">Utilities</option>
+                                    <option value="Rent">Rent</option>
+                                    <option value="Investments">Investments</option>
+                                    <option value="Other">Other</option>
+                                </optgroup>
+                                </select></td>
+                            <td className=''><input onChange={(e) => handleEditEntry(entry.id,'note',e)} value={entry.note} className='bg-white border rounded-md overflow-hidden px-1 w-9/10'></input></td>
+                            <td>
+                                <button onClick={() => handleDeleteEntry(entry.id)} className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg'>Delete</button>
+                            </td>
+                        </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         </div>
         <button onClick={() => handleAddEntry()} className='text-white bg-cyan-500 hover:bg-cyan-700 font-bold py-2 px-4 rounded-lg mt-4'>
             Add Entry
         </button>
-        <div className='size-7/8 lg:size-1/3 text-black mt-4'>
-            <Doughnut data={data} options={{
+        <div className='size-fit text-black mt-4 flex items-center justify-center'>
+            <Doughnut height={500} width={500} data={data} options={{
                 plugins: {
                     title: {
                     display: true,
